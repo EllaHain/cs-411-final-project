@@ -1,5 +1,5 @@
 import base64
-from Flask import Flask, request, redirect
+from flask import Flask, request, redirect
 from pymongo import MongoClient
 import requests
 
@@ -13,7 +13,7 @@ users_collection = db['users']
 # Spotify API credentials
 SPOTIFY_CLIENT_ID = 'a92ce09ecca44a398b703c4ab2027a2f'
 SPOTIFY_CLIENT_SECRET = '9ad599d41f414890a05add0285a91e13'
-SPOTIFY_REDIRECT_URI = 'http://localhost:5000/spotify-redirect'
+SPOTIFY_REDIRECT_URI = 'http://localhost:5001/spotify-redirect'
 
 @app.route('/spotify-login')
 def spotify_login():
@@ -49,4 +49,4 @@ def exchange_code_for_token(code):
         return None
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
