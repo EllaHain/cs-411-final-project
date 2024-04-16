@@ -1,6 +1,7 @@
 <h1>How to Run:</h1>
-1) cd into client folder
-2) run npm run dev to open application on local host
+Video Link: https://drive.google.com/file/d/13BWYGNe9ShVDmPKRlIDXPyWzhZQ9A5My/view?usp=sharing
+1) cd into client folder<br>
+2) run npm run dev to open application on local host<br>
 3) input name and pass and hit login- should take you to the home page
 
 
