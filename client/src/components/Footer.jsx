@@ -2,7 +2,7 @@ const Footer = () => {
     return (
       <>
         <footer>
-          <p> &copy; 2024 Spark! BookPals. All Rights Reserved.</p> {/*Will show up on bottom of pages */}
+          <p> &copy; CS411 Final Project</p> {/*Will show up on bottom of pages */}
         </footer>
       </>
     );

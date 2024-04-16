@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, message } from 'antd';
 
 const Login = () => {
-    
+  const [loading, setLoading] = useState(false);
+
+  const onFinish = async (values) => {
+    window.location.href = "../home";
+  };
+
   return (
-    <Form
+      <Form
       name="normal_login"
       className="login-form"
       initialValues={{
         remember: true,
       }}
+      onFinish={onFinish}
     >
       <Form.Item
         name="username"
