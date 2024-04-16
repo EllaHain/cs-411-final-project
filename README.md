@@ -1,3 +1,9 @@
+<h1>How to Run:</h1>
+1) cd into client folder
+2) run npm run dev to open application on local host
+3) input name and pass and hit login- should take you to the home page
+
+
 # CS411 Project
 <h1> Project Description: </h1>
 <p1>We will combine the weather API and the Spotify API in order to make an application that allows the user to receive a playlist from Spotify to match the weather. 
