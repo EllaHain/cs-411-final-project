@@ -1,19 +1,28 @@
-// Import dependencies
-const express = require('express');
-// Import your server code from the JSX file
-const login = require('./users/login.jsx');
+// server.js
 
-// Create Express app
-const app = express();
+const connectToMongoDB = require('./app/db');
+const app = require('./app/index');
 
-// Set up middleware, routes, etc.
-// Example:
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
+// Establish MongoDB connection
+connectToMongoDB()
+  .then(() => {
+    console.log('MongoDB connection established');
 
-// Start the server
-const port = 4000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+    // Start the server
+    const port = process.env.PORT || 3088;
+    app.listen(port, () => {
+      console.log(`Server is running on http://localhost:${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Failed to connect to MongoDB:', error);
+    process.exit(1); // Exit process with failure
+  });
+
+
+
+
+
+
+
+
