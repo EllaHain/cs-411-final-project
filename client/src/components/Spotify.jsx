@@ -123,6 +123,21 @@ const Spotify = ({ weatherCondition, accessToken }) => {
       return shuffledArray;
     };
 
+    if (accessToken && accessToken.expires_in) {
+      // Calculate expiration date
+      const expirationTimeInSeconds = accessToken.expires_in;
+      const now = new Date();
+      const expiration = new Date(now.getTime() + expirationTimeInSeconds * 1000);
+      setExpirationDate(expiration);
+  
+      // Log expiration status
+      if (expiration < now) {
+        console.log('Access token has expired.');
+      } else {
+        console.log('Access token is still valid.');
+      }
+    }
+
     if (weatherCondition) {
       fetchPlaylistsByCondition();
     }
