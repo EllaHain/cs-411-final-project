@@ -162,7 +162,7 @@ const Spotify = ({ weatherCondition, accessToken }) => {
             )}
             <ul>
               {playlistData.tracks.slice(0, 10).map((track, index) => (
-                <li key={index}>{track.track.name}</li>
+                <li key={index} style={{ fontFamily: 'Montserrat', color: '#6E7D9A' }}>{track.track.name}</li>
               ))}
             </ul>
           </div>
