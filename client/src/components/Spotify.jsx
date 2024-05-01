@@ -146,25 +146,29 @@ const Spotify = ({ weatherCondition, accessToken }) => {
   return (
     <div>
       {loading ? (
-        <p>Loading playlists...</p>
+        <p style={{ fontFamily: 'Montserrat', color: 'white' }}>Loading playlists...</p>
       ) : playlistData ? (
-        <div>
-          <h2>Playlist Information</h2>
-          {playlistData.coverImage && (
-            <a target= "_blank" href={playlistData.external_urls.spotify}><img src={playlistData.coverImage} alt="Playlist Cover"/></a>
-          )}
-          <p>Name: {playlistData.name}</p>
-          <p>Description: {playlistData.description}</p> {/* Display playlist description */}
-          <p>Owner: {playlistData.owner.display_name}</p>
-          <p>Total Tracks: {playlistData.tracks.length}</p>
-          <ul>
-            {playlistData.tracks.slice(0, 10).map((track, index) => (
-              <li key={index}>{track.track.name}</li>
-            ))}
-          </ul>
+        <div style={{ display: 'flex' }}>
+          <div style={{ textAlign: 'left', marginLeft: '0px', fontFamily: 'Montserrat', color: '#6E7D9A' }}>
+            <h2>Playlist Information</h2>
+            <p>Name: {playlistData.name}</p>
+            <p>Description: {playlistData.description}</p> {/* Display playlist description */}
+            <p>Owner: {playlistData.owner.display_name}</p>
+            <p>Total Tracks: {playlistData.tracks.length}</p>
+          </div>
+          <div style={{ marginLeft: 'auto' }}>
+            {playlistData.coverImage && (
+              <a target= "_blank" href={playlistData.external_urls.spotify}><img src={playlistData.coverImage} alt="Playlist Cover"/></a>
+            )}
+            <ul>
+              {playlistData.tracks.slice(0, 10).map((track, index) => (
+                <li key={index}>{track.track.name}</li>
+              ))}
+            </ul>
+          </div>
         </div>
       ) : (
-        <p>No playlists found for the current weather condition</p>
+        <p style={{ fontFamily: 'Montserrat', color: 'white' }}>No playlists found for the current weather condition</p>
       )}
     </div>
   );
