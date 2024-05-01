@@ -1,28 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Spotify from './Spotify'; // Import the Spotify component
 
-const Weather = ({ accessToken, isLoggedIn }) => {
+const Weather = ({accessToken}) => {
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState('');
-  const [formMoved, setFormMoved] = useState(false); // State to track if the form should move
+  const [formMoved, setFormMoved] = useState(false);
+  
 
-  const fetchWeatherData = async (formattedLocation) => {
+  const fetchWeatherData = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${formattedLocation}&APPID=ed8e96a3cdb3c6aac7c40cb9e4859593`);
+      const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=ed8e96a3cdb3c6aac7c40cb9e4859593`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
       setWeatherData(data);
       setLoading(false);
-      setFormMoved(true); // Set form moved to true after successful data fetch
+      setFormMoved(true);
     } catch (error) {
       console.error('Error fetching weather data:', error);
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (location !== '') {
+      fetchWeatherData();
+    }
+  }, []);
+
 
   const preprocessLocation = (location) => {
     let formattedLocation = location.trim();
@@ -31,15 +39,15 @@ const Weather = ({ accessToken, isLoggedIn }) => {
     return formattedLocation;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = e => {
     e.preventDefault();
     const formattedLocation = preprocessLocation(location);
     if (formattedLocation !== '') {
+      setLocation(formattedLocation);
       fetchWeatherData(formattedLocation);
     }
   };
 
-  // Styling for the form when it should move to the bottom left
   const formStyle = formMoved
     ? {
         position: 'absolute',
@@ -61,7 +69,7 @@ const Weather = ({ accessToken, isLoggedIn }) => {
     <div style={{ position: 'relative', width: '100%', minHeight: '100vh' }}>
       <form onSubmit={handleSubmit} style={formStyle}>
         {/* Render "Logged in." if isLoggedIn is true and form has not moved */}
-        {isLoggedIn && !formMoved && (
+        {!formMoved && (
           <p style={{ fontFamily: 'Montserrat', color: 'white', textAlign: 'center', fontSize: '60px', fontWeight: 800, marginBottom: '40px', marginLeft: '20px' }}>
             Logged in.
           </p>

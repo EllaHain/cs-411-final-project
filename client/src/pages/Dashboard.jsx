@@ -11,7 +11,7 @@ const Dashboard = () => {
 
   const handleLogin = () => {
     const clientId = 'a92ce09ecca44a398b703c4ab2027a2f';
-    const redirectUri = 'http://localhost:5173';
+    const redirectUri = 'http://localhost:5173/dashboard';
     const scope = 'user-read-private user-read-email';
     const responseType = 'token';
   
@@ -75,7 +75,7 @@ const Dashboard = () => {
       padding: 0,
       overflow: 'hidden',
     }}>
-      {!isLoggedIn ? (
+      {accessToken===null ? (
         <>
           <h2 style={{ fontFamily: 'Montserrat', color: 'white', textAlign: 'center', fontSize: '60px', marginBottom: '2px' }}>Login with</h2>
           <h2 style={{ fontFamily: 'Montserrat', color: 'white', textAlign: 'center', fontSize: '60px', marginBottom: '40px', marginTop: 0 }}>Spotify</h2>
@@ -92,7 +92,7 @@ const Dashboard = () => {
           }} onClick={handleLogin}>Login</button>
         </>
       ) : (
-        <WeatherComponent isLoggedIn={isLoggedIn} accessToken={accessToken} />
+        <WeatherComponent accessToken={accessToken} />
       )}
     </div>
   );

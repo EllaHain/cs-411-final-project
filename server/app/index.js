@@ -2,7 +2,8 @@
 
 const express = require('express');
 const cors = require('cors');
-const authController = require('./controllers/authController'); // Import authController module
+const playlistsRouter = require('./routes/playlists.router.js');
+
 
 
 const app = express();
@@ -13,7 +14,7 @@ app.use(express.json());
 
 // Routes
 //app.get('/auth', authController.auth); // Use auth function from authController for /auth route
-//app.get('/callback', authController.callback); // Use callback function from authController for /callback route
+app.use('/api/spotify', playlistsRouter);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

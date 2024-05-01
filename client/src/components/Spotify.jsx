@@ -37,6 +37,12 @@ const Spotify = ({ weatherCondition, accessToken }) => {
                 coverImage: coverImage,
                 description: description // Include playlist description in the state
               });
+
+              savePlaylistToBackend({
+                  title: playlist.name,
+                  description: playlist.description,
+                  owner: playlist.owner.display_name, // Assuming owner field exists in the playlist object
+              });
               break;
             }
           }
@@ -52,6 +58,29 @@ const Spotify = ({ weatherCondition, accessToken }) => {
         setLoading(false);
       }
     };
+
+    const savePlaylistToBackend = async (playlistData) => {
+      try {
+        const { title, description, owner } = playlistData;
+        console.log(title, description, owner)
+        const response = await fetch('http://localhost:3088/api/spotify/playlists', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ title, description, owner }),
+        });
+        console.log(response)
+         if (!response.ok) {
+          throw new Error('Failed to save playlist');
+        }
+         const result = await response.json();
+        console.log('Playlist saved successfully:', result);
+      } catch (error) {
+        console.error('Error saving playlist:', error);
+      }
+    };
+ 
 
     const fetchPlaylistCover = async (playlistId) => {
       try {
@@ -78,15 +107,18 @@ const Spotify = ({ weatherCondition, accessToken }) => {
 
     const fetchPlaylistTracks = async (playlistId) => {
       try {
+        console.log(playlistId)
         const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
           headers: {
             Authorization: `Bearer ${accessToken}`
           }
         });
+        console.log(response)
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
         const data = await response.json();
+        console.log("track",data.items)
         return data.items;
       } catch (error) {
         console.error('Error fetching playlist tracks:', error);
@@ -123,23 +155,9 @@ const Spotify = ({ weatherCondition, accessToken }) => {
       return shuffledArray;
     };
 
-    if (accessToken && accessToken.expires_in) {
-      // Calculate expiration date
-      const expirationTimeInSeconds = accessToken.expires_in;
-      const now = new Date();
-      const expiration = new Date(now.getTime() + expirationTimeInSeconds * 1000);
-      setExpirationDate(expiration);
-  
-      // Log expiration status
-      if (expiration < now) {
-        console.log('Access token has expired.');
-      } else {
-        console.log('Access token is still valid.');
-      }
-    }
-
     if (weatherCondition) {
       fetchPlaylistsByCondition();
+
     }
   }, [weatherCondition, accessToken]);
 
@@ -149,22 +167,24 @@ const Spotify = ({ weatherCondition, accessToken }) => {
         <p style={{ fontFamily: 'Montserrat', color: 'white' }}>Loading playlists...</p>
       ) : playlistData ? (
         <div style={{ display: 'flex' }}>
-          <div style={{ textAlign: 'left', marginLeft: '0px', fontFamily: 'Montserrat', color: '#6E7D9A' }}>
+          <div style={{ textAlign: 'left', marginLeft: '0px', fontFamily: 'Montserrat', color: '#6E7D9A', maxWidth: '350px', backgroundColor: "white", maxHeight: '350px'}}>
             <h2>Playlist Information</h2>
             <p>Name: {playlistData.name}</p>
             <p>Description: {playlistData.description}</p> {/* Display playlist description */}
             <p>Owner: {playlistData.owner.display_name}</p>
             <p>Total Tracks: {playlistData.tracks.length}</p>
           </div>
-          <div style={{ marginLeft: 'auto' }}>
+          <div style={{ marginLeft: 'auto'}}>
             {playlistData.coverImage && (
-              <a target= "_blank" href={playlistData.external_urls.spotify}><img src={playlistData.coverImage} alt="Playlist Cover"/></a>
+              <a target= "_blank" href={playlistData.external_urls.spotify}><img src={playlistData.coverImage} alt="Playlist Cover" style={{ width: '350px', height: '350px' }}/></a>
             )}
-            <ul>
-              {playlistData.tracks.slice(0, 10).map((track, index) => (
-                <li key={index} style={{ fontFamily: 'Montserrat', color: '#6E7D9A' }}>{track.track.name}</li>
-              ))}
-            </ul>
+            <div style={{ maxHeight: '375px', overflowY: 'auto', maxWidth: '350px', backgroundColor:"white"  }}> {/* Add a wrapping div with max height and overflow-y:auto */}
+      <ul>
+        {playlistData.tracks.map((track, index) => (
+          <li key={index} style={{ fontFamily: 'Montserrat', color: '#6E7D9A' }}>{track.track.name}</li>
+        ))}
+      </ul>
+    </div>
           </div>
         </div>
       ) : (
