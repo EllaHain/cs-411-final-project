@@ -1,19 +1,30 @@
-<h1>How to Run:</h1>
+<h1>How to Run</h1>
 Video Link: https://drive.google.com/file/d/13BWYGNe9ShVDmPKRlIDXPyWzhZQ9A5My/view?usp=sharing<br>
-1) cd into client folder<br>
-2) run npm run dev to open application on local host<br>
-3) input name and pass and hit login- should take you to the home page
 
+```
+npm install
+```
+
+```
+cd client
+npm run dev
+```
+
+```
+cd server
+node server.js
+```
+open application on localhost:5173/dashboard<br>
 
 # CS411 Project
-<h1> Project Description: </h1>
+<h3> Project Description </h3>
 <p1>We will combine the weather API and the Spotify API in order to make an application that allows the user to receive a playlist from Spotify to match the weather. 
   We expect to use the weather API, and the Spotify API. 
   We will use the database to store user account information.
   We intend to use React.js and Flask, but that may change.
 </p1>
 
-<h1>Project Requirements:</h1>
+<h3>Project Requirements</h3>
 <p1>
 <ul>
   <li><b>Goal:</b> Develop a responsive web application that allows users to receive Spotify playlist recommendations based on real-time weather conditions.
@@ -32,7 +43,7 @@ Video Link: https://drive.google.com/file/d/13BWYGNe9ShVDmPKRlIDXPyWzhZQ9A5My/vi
   </ul></li>
 </ul></p1>
 
-<h1>Project Management:</h1>
+<h3>Project Management</h3>
 <ul>
 <li><b>Theme:</b> Create a sense of enjoyment and preparation for the day through connecting outside weather forces to music.</li>
 <li><b>Epic:</b> Weather based playlists recommendations</li>
