@@ -5,7 +5,6 @@ import image from "/images/background1.jpg";
 
 const Dashboard = () => {
   const [accessToken, setAccessToken] = useState(null);
-  const [isExpired, setIsExpired] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
@@ -14,22 +13,28 @@ const Dashboard = () => {
     const redirectUri = 'http://localhost:5173/dashboard';
     const scope = 'user-read-private user-read-email';
     const responseType = 'token';
-  
+    const showDialog = true; // Set to true to force user approval again
+    
     // Redirect the user to Spotify authorization endpoint
-    window.location.href = `https://accounts.spotify.com/authorize?client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&response_type=${responseType}`;
+    window.location.href = `https://accounts.spotify.com/authorize?client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&response_type=${responseType}&show_dialog=${showDialog}`;
   };
   
   // Function to handle the redirect after authorization
   const handleAuthorizationResponse = () => {
-    // Extract the access token from the URL fragment
+    // Extract the access token and expiration time from the URL fragment
     const params = new URLSearchParams(window.location.hash.substr(1));
     const token = params.get('access_token');
-    if (token) {
+    const expiresIn = params.get('expires_in');
+    
+    if (token && expiresIn) {
       setAccessToken(token);
       setIsLoggedIn(true);
       localStorage.setItem('accessToken', token);
-      const expirationTime = Date.now() + (1 * 60 * 60 * 1000); // 1 hour
+      
+      // Calculate expiration time
+      const expirationTime = Date.now() + (parseInt(expiresIn) * 1000); // Convert expiresIn to milliseconds
       localStorage.setItem('expirationTime', expirationTime);
+      console.log("Expiration time:", new Date(expirationTime)); // Print expiration time
     }
   };
 
@@ -40,23 +45,22 @@ const Dashboard = () => {
   useEffect(() => {
     // Check if access token exists in localStorage
     const token = localStorage.getItem('accessToken');
-    const expirationTime = localStorage.getItem('expirationTime');
-    
+    const expirationTime = localStorage.getItem('expires_in');
+    console.log("Expiration Time 2:", new Date(parseInt(expirationTime)).toLocaleString('en-US', {timeZone: 'America/New_York', hour12: true}));
     if (token && expirationTime) {
       const currentTime = Date.now();
-      if (currentTime < expirationTime) {
+      const expiration = parseInt(expirationTime); // Parse expirationTime to int
+      if (currentTime < expiration) {
         setAccessToken(token);
         setIsLoggedIn(true);
       } else {
-        setIsExpired(true);
-        // Token has expired, clear localStorage
+        // Token has expired, clear localStorage and navigate
         localStorage.removeItem('accessToken');
         localStorage.removeItem('expirationTime');
-        navigate('/dashboard'); // Use navigate instead of history.push
+        setAccessToken(null);
+        setIsLoggedIn(false);
+        navigate('/dashboard'); // Navigate to login page
       }
-    } else {
-      // Handle authorization response on mount if available
-      handleAuthorizationResponse();
     }
   }, [navigate]);
 
@@ -75,14 +79,14 @@ const Dashboard = () => {
       padding: 0,
       overflow: 'hidden',
     }}>
-      {accessToken===null ? (
+      {accessToken === null || accessToken.expires_in <= Date.now()? (
         <>
-          <h2 style={{ fontFamily: 'Montserrat', color: 'white', textAlign: 'center', fontSize: '60px', marginBottom: '2px' }}>Login with</h2>
-          <h2 style={{ fontFamily: 'Montserrat', color: 'white', textAlign: 'center', fontSize: '60px', marginBottom: '40px', marginTop: 0 }}>Spotify</h2>
+          <h2 style={{ fontFamily: 'Montserrat', color: 'black', textAlign: 'center', fontSize: '60px', marginBottom: '2px' }}>Login with</h2>
+          <h2 style={{ fontFamily: 'Montserrat', color: 'black', textAlign: 'center', fontSize: '60px', marginBottom: '40px', marginTop: 0 }}>Spotify</h2>
           <button style={{ 
             fontFamily: 'Montserrat', 
             color: 'white',
-            backgroundColor: '#6E7D9A', 
+            backgroundColor: 'black', 
             border: 'none', 
             padding: '15px 150px', 
             cursor: 'pointer', 
@@ -92,7 +96,7 @@ const Dashboard = () => {
           }} onClick={handleLogin}>Login</button>
         </>
       ) : (
-        <WeatherComponent accessToken={accessToken} />
+        <WeatherComponent accessToken={accessToken} handleAuthorizationResponse={handleAuthorizationResponse}/>
       )}
     </div>
   );

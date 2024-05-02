@@ -164,34 +164,39 @@ const Spotify = ({ weatherCondition, accessToken }) => {
   return (
     <div>
       {loading ? (
-        <p style={{ fontFamily: 'Montserrat', color: 'white' }}>Loading playlists...</p>
+        <p style={{ fontFamily: 'Montserrat', color: 'black', marginLeft: '20px' }}>Loading playlists...</p>
       ) : playlistData ? (
         <div style={{ display: 'flex' }}>
-          <div style={{ textAlign: 'left', marginLeft: '0px', fontFamily: 'Montserrat', color: '#6E7D9A', maxWidth: '350px', backgroundColor: "white", maxHeight: '350px'}}>
+          <div style={{ textAlign: 'left', marginLeft: '20px', fontFamily: 'Montserrat', color: 'black', marginRight:"70px"}}>
             <h2>Playlist Information</h2>
-            <p>Name: {playlistData.name}</p>
-            <p>Description: {playlistData.description}</p> {/* Display playlist description */}
-            <p>Owner: {playlistData.owner.display_name}</p>
-            <p>Total Tracks: {playlistData.tracks.length}</p>
+            <p><mark style={{backgroundColor:"white"}}>Name: {playlistData.name}</mark></p>
+            <p><mark style={{backgroundColor:"white"}}>Description: {playlistData.description}</mark></p>
+            <p><mark style={{backgroundColor:"white"}}>Owner: {playlistData.owner.display_name}</mark></p>
+            <p><mark style={{backgroundColor:"white"}}>Total Tracks: {playlistData.tracks.length}</mark></p>
           </div>
-          <div style={{ marginLeft: 'auto'}}>
+          <div style={{ textAlign: 'center' }}>
             {playlistData.coverImage && (
-              <a target= "_blank" href={playlistData.external_urls.spotify}><img src={playlistData.coverImage} alt="Playlist Cover" style={{ width: '350px', height: '350px' }}/></a>
+              <img src={playlistData.coverImage} alt="Playlist Cover" style={{ width: '350px', height: '350px', display: 'block', margin: '0 auto' }} />
             )}
-            <div style={{ maxHeight: '375px', overflowY: 'auto', maxWidth: '350px', backgroundColor:"white"  }}> {/* Add a wrapping div with max height and overflow-y:auto */}
-      <ul>
-        {playlistData.tracks.map((track, index) => (
-          <li key={index} style={{ fontFamily: 'Montserrat', color: '#6E7D9A' }}>{track.track.name}</li>
-        ))}
-      </ul>
-    </div>
+            <div style={{ marginTop: '10px' }}>
+              <a target="_blank" href={playlistData.external_urls.spotify} style={{ fontFamily: 'Montserrat',display: 'inline-block', backgroundColor: 'black', color: 'white', padding: '10px 20px', textAlign: 'center', textDecoration: 'none', fontSize: '16px', borderRadius: '5px', cursor: 'pointer' }}>Get Playlist</a>
+            </div>
+          </div>
+          <div style={{ maxHeight: '400px', overflowY: 'scroll' }}>
+            <ul>
+              {playlistData.tracks.map((track, index) => (
+                <li key={index} style={{ fontFamily: 'Montserrat', color: 'black' }}>{track.track.name}</li>
+              ))}
+            </ul>
           </div>
         </div>
       ) : (
-        <p style={{ fontFamily: 'Montserrat', color: 'white' }}>No playlists found for the current weather condition</p>
+        <p style={{ fontFamily: 'Montserrat', color: 'black', marginLeft: '20px' }}>No playlists found for the current weather condition</p>
       )}
     </div>
   );
+
+
 };
 
 export default Spotify;

@@ -7,12 +7,8 @@ admin.initializeApp({
 });
 async function createPlaylist(req, res, next) {
   try {
-    console.log("hello")
-    
-    
     // Extract playlist data from request body
     const { title, owner, description } = req.body;
-    console.log(title, owner, description)
     // Initialize Firestore
     const firestore = admin.firestore();
 
