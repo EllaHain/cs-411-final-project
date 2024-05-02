@@ -1,5 +1,4 @@
 <h1>How to Run</h1>
-Video Link: https://drive.google.com/file/d/13BWYGNe9ShVDmPKRlIDXPyWzhZQ9A5My/view?usp=sharing<br>
 
 ```
 npm install
